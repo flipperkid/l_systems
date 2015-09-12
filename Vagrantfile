@@ -43,13 +43,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.cpus = 2
   end
 
-  # When Vagrant spins up a machine, it will also load your cookbook 
+  # When Vagrant spins up a machine, it will also load your cookbook
   # dependencies via Berkshelf
   config.berkshelf.enabled = true
-  config.berkshelf.berksfile_path = "citadel_cookbook/Berksfile"
+  config.berkshelf.berksfile_path = "cookbook/Berksfile"
 
   # Set the version of Chef you want to use.  The omnibus plug in will
-  # ensure you get the version you want installed as Vagrant spins up 
+  # ensure you get the version you want installed as Vagrant spins up
   # the machine
   config.omnibus.chef_version = '11.14.2'
 
