@@ -12,3 +12,9 @@
   end
 end
 
+include_recipe "nodejs"
+include_recipe "nodejs::npm"
+%w{gulp gulp-connect}.each do |pkg|
+  nodejs_npm pkg
+end
+

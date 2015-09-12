@@ -1,0 +1,24 @@
+{
+  "name": "citadel",
+  "version": "0.1.0",
+  "descriptions": "",
+  "homepage": "",
+  "bugs": "",
+  "author": {
+    "name": "",
+    "email": "",
+    "url": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "main": "src/app.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "keywords": [],
+  "licenses": []
+}
