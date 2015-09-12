@@ -3,9 +3,73 @@
     <script src="https://fb.me/react-with-addons-0.13.3.js"></script>
     <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
     <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
-    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
   </head>
   <body>
-    
+    <script type="text/jsx">
+      var firebase = new Firebase('https://citadel.firebaseio.com/');
+      var allMessages = [];
+      firebase.on('child_added', function(snapshot) {
+        allMessages.push(snapshot.val());
+      }, this);
+
+      var ChatMessage = React.createClass({
+        render: function() {
+          return (
+            <div><span>{this.props.name}: {this.props.text}</span></div>
+          );
+        }
+      });
+
+      var Chat = React.createClass({
+        render: function() {
+          var messages = this.state.messages.map(function(message) {
+            return (<ChatMessage name={message.name} text={message.text} />)
+          });
+
+          return (
+            <div>
+              <div>{messages}</div>
+              <input type='text' ref='nameInput' placeholder='Name'>
+                {this.state.name}
+              </input>
+              <input type='text' ref='messageInput' placeholder='Message'
+                  onKeyPress={this.onKeyPress}>
+                {this.state.text}
+              </input>
+            </div>
+          );
+        },
+
+        getInitialState: function() {
+          return {
+            messages: allMessages,
+            name: '',
+            text: ''
+          }
+        },
+
+        componentDidMount: function() {
+          var self = this;
+          Object.observe(allMessages, function() {
+            self.setState({
+              messages: allMessages,
+              name: self.state.name,
+              text: self.state.text
+            });
+          });
+        },
+
+        onKeyPress: function (e) {
+          if (e.charCode == 13) {
+            var name = this.refs.nameInput.getDOMNode().value;
+            var text = this.refs.messageInput.getDOMNode().value;
+            firebase.push({name: name, text: text});
+            this.refs.messageInput.getDOMNode().value = '';
+          }
+        }
+      });
+
+      React.render(<Chat/>, document.body);
+    </script>
   </body>
 </html>
