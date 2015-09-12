@@ -1,4 +1,4 @@
-# citadel_cookbook-cookbook
+# celerity_cookbook-cookbook
 
 TODO: Enter the cookbook description here.
 
@@ -16,7 +16,7 @@ TODO: List your supported platforms.
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>['citadel_cookbook']['bacon']</tt></td>
+    <td><tt>['celerity_cookbook']['bacon']</tt></td>
     <td>Boolean</td>
     <td>whether to include bacon</td>
     <td><tt>true</tt></td>
@@ -25,14 +25,14 @@ TODO: List your supported platforms.
 
 ## Usage
 
-### citadel_cookbook::default
+### celerity_cookbook::default
 
-Include `citadel_cookbook` in your node's `run_list`:
+Include `celerity_cookbook` in your node's `run_list`:
 
 ```json
 {
   "run_list": [
-    "recipe[citadel_cookbook::default]"
+    "recipe[celerity_cookbook::default]"
   ]
 }
 ```

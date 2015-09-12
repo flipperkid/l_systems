@@ -4,6 +4,8 @@ var connect = require('gulp-connect');
 
 gulp.task('webserver', function() {
   connect.server({
+    port: 8080,
+    host: 'celerity.dev',
     livereload: true
   });
 });

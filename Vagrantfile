@@ -10,7 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-  config.vm.hostname = "citadel-vm"
+  config.vm.hostname = "celerity-vm"
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
@@ -55,7 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :chef_solo do |chef|
     chef.run_list = [
-        "recipe[citadel_cookbook::default]"
+        "recipe[celerity_cookbook::default]"
     ]
     chef.verbose_logging = true
   end

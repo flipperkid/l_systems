@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: citadel_cookbook
+# Cookbook Name:: celerity_cookbook
 # Recipe:: default
 #
 # Copyright (C) 2015 YOUR_NAME

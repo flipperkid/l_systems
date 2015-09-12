@@ -1,4 +1,4 @@
-var firebase = new Firebase('https://citadel.firebaseio.com/');
+var firebase = new Firebase('https://celerity.firebaseio.com/');
 var allMessages = [];
 firebase.on('child_added', function(snapshot) {
   allMessages.push(snapshot.val());
