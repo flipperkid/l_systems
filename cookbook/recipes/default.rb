@@ -14,7 +14,6 @@ end
 
 include_recipe "nodejs"
 include_recipe "nodejs::npm"
-%w{gulp gulp-connect gulp-babel}.each do |pkg|
+%w{gulp gulp-connect gulp-util webpack babel-loader react redux}.each do |pkg|
   nodejs_npm pkg
 end
-

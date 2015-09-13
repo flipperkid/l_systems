@@ -13,7 +13,7 @@
     "type": "git",
     "url": ""
   },
-  "main": "src/app.js",
+  "main": "src/app.jsx",
   "dependencies": {},
   "devDependencies": {},
   "engines": {

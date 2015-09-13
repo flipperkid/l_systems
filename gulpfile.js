@@ -1,6 +1,8 @@
 var gulp = require('gulp');
-var babel = require('gulp-babel');
 var connect = require('gulp-connect');
+var gutil = require("gulp-util");
+var webpack = require("webpack");
+var webpackConfig = require('./webpack.config.js')
 
 gulp.task('webserver', function() {
   connect.server({
@@ -10,15 +12,23 @@ gulp.task('webserver', function() {
   });
 });
 
-gulp.task('babel', function() {
-  return gulp.src('src/app.jsx')
-    .pipe(babel())
-    .pipe(gulp.dest('dist'))
-    .pipe(connect.reload());
+gulp.task("build-dev", ["webpack"], function() {
+  gulp.watch(["src/*.jsx"], ["webpack"]);
 });
 
-gulp.task('watch', function() {
-  gulp.watch('src/*.jsx', ['babel']);
+var devConfig = Object.create(webpackConfig);
+devConfig.devtool = "sourcemap";
+devConfig.debug = true;
+var devCompiler = webpack(devConfig);
+gulp.task('webpack', function() {
+  devCompiler.run(function(err, stats) {
+    if(err) {
+      throw new gutil.PluginError('webpack', err);
+    }
+    gutil.log("[webpack]", stats.toString({
+			colors: true
+		}));
+  });
 });
 
-gulp.task('default', ['babel', 'webserver', 'watch']);
+gulp.task('default', ['build-dev', 'webserver']);
