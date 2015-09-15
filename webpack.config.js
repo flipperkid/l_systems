@@ -1,4 +1,4 @@
-var path = require("path");
+var path = require('path');
 module.exports = {
   entry: __dirname,
   cache: true,
@@ -13,8 +13,9 @@ module.exports = {
     ]
   },
   output: {
-    path: path.join(__dirname, "dist"),
-    filename: 'app.js'
+    path: path.join(__dirname, 'dist'),
+    publicPath: 'dist/',
+		filename: 'app.js'
   },
   module: {
     loaders: [{
@@ -22,5 +23,6 @@ module.exports = {
       exclude: /(node_modules|bower_components)/,
       loader: 'babel-loader'
     }]
-  }
+  },
+  plugins: []
 }

@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-var React = require("react");
+var React = require('react');
 
 var ActionTypes = {
   RECEIVE_MESSAGE: 'RECEIVE_MESSAGE',
