@@ -63,11 +63,23 @@ gulp.task('webpack-dev-server', function(callback) {
   var devServerConfig = Object.create(webpackConfig);
   devServerConfig.devtool = 'eval';
   devServerConfig.debug = true;
+  devServerConfig.entry = [
+    'webpack-dev-server/client?http://celerity.dev:8080/',
+    'webpack/hot/only-dev-server'
+  ].concat(devServerConfig.entry);
+  devServerConfig.plugins = devServerConfig.plugins.concat(
+    new webpack.HotModuleReplacementPlugin()
+  );
 
   // Start a webpack-dev-server
   new WebpackDevServer(webpack(devServerConfig), {
     publicPath: '/' + devServerConfig.output.publicPath,
     hot: true,
+    inline: true,
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000
+    },
     stats: {
       colors: true
     }
@@ -75,8 +87,8 @@ gulp.task('webpack-dev-server', function(callback) {
     if(err) {
       throw new gutil.PluginError('webpack-dev-server', err);
     }
-    
-    gutil.log('[webpack-dev-server]', 'http://celerity-dev:8080/webpack-dev-server/index.html');
+
+    gutil.log('[webpack-dev-server]', 'http://celerity.dev:8080/index.html');
   });
 });
 

@@ -49,13 +49,15 @@ class ChatMessage extends Component {
 }
 
 class Chat extends Component {
+  constructor() {
+   super();
+   this.state = store.getState();
+  }
+
   render() {
-    var messages = []
-    if (this.state) {
-      messages = this.state.messages.map(function(message) {
-        return (<ChatMessage name={message.name} text={message.text} />)
-      });
-    }
+    var messages = this.state.messages.map(function(message) {
+      return (<ChatMessage name={message.name} text={message.text} />)
+    });
 
     return (
       <div>
@@ -63,13 +65,9 @@ class Chat extends Component {
         <input type='text' ref='nameInput' placeholder='Name' />
         <input type='text' ref='messageInput' placeholder='Message'
           onKeyPress={this.onKeyPress} onChange={this.onTextChange}
-          value={this.state ? this.state.text : ''} />
+          value={this.state.text} />
       </div>
     );
-  }
-
-  getInitialState() {
-    return store.getState();
   }
 
   componentDidMount() {

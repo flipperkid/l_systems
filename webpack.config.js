@@ -1,6 +1,8 @@
 var path = require('path');
 module.exports = {
-  entry: __dirname,
+  entry: [
+    path.join(__dirname, 'src/app.jsx')
+  ],
   cache: true,
   resolveLoader: {
     root: [
@@ -21,7 +23,8 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /(node_modules|bower_components)/,
-      loader: 'babel-loader'
+      include: path.join(__dirname, 'src'),
+      loaders: ['react-hot', 'babel-loader']
     }]
   },
   plugins: []
