@@ -14,6 +14,6 @@ end
 
 include_recipe "nodejs"
 include_recipe "nodejs::npm"
-%w{gulp gulp-connect gulp-util webpack webpack-dev-server babel-loader react redux}.each do |pkg|
+%w{gulp gulp-connect gulp-util webpack webpack-dev-server babel-loader react react-hot-loader redux redux-devtools}.each do |pkg|
   nodejs_npm pkg
 end

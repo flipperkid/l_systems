@@ -1,17 +1,19 @@
-import { createStore } from 'redux';
-var React = require('react');
+import { compose, createStore } from 'redux';
+import { devTools, persistState } from 'redux-devtools';
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+import React, { Component } from 'react';
 
-var ActionTypes = {
+const ActionTypes = {
   RECEIVE_MESSAGE: 'RECEIVE_MESSAGE',
   SUBMIT: 'SUBMIT'
 };
 
-var initialState = {
+const initialState = {
   messages: [],
   text: ''
 };
-var reducer = function(state = initialState, action) {
-  var newState = $.extend({}, state);
+const reducer = function(state = initialState, action) {
+  var newState = $.extend(true, {}, state);
   switch (action.type) {
     case ActionTypes.SUBMIT:
       setTimeout(() => firebase.push(action.message))
@@ -25,8 +27,12 @@ var reducer = function(state = initialState, action) {
   }
 };
 
-var store = createStore(reducer);
-var firebase = new Firebase('https://celerity.firebaseio.com/');
+const finalCreateStore = compose(
+  devTools(),
+  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
+)(createStore);
+const store = finalCreateStore(reducer);
+const firebase = new Firebase('https://celerity.firebaseio.com/');
 firebase.on('child_added', function(snapshot) {
   store.dispatch({
     type: ActionTypes.RECEIVE_MESSAGE,
@@ -34,19 +40,22 @@ firebase.on('child_added', function(snapshot) {
   });
 }, this);
 
-var ChatMessage = React.createClass({
-  render: function() {
+class ChatMessage extends Component {
+  render() {
     return (
       <div><span>{this.props.name}: {this.props.text}</span></div>
     );
   }
-});
+}
 
-var Chat = React.createClass({
-  render: function() {
-    var messages = this.state.messages.map(function(message) {
-      return (<ChatMessage name={message.name} text={message.text} />)
-    });
+class Chat extends Component {
+  render() {
+    var messages = []
+    if (this.state) {
+      messages = this.state.messages.map(function(message) {
+        return (<ChatMessage name={message.name} text={message.text} />)
+      });
+    }
 
     return (
       <div>
@@ -54,26 +63,26 @@ var Chat = React.createClass({
         <input type='text' ref='nameInput' placeholder='Name' />
         <input type='text' ref='messageInput' placeholder='Message'
           onKeyPress={this.onKeyPress} onChange={this.onTextChange}
-          value={this.state.text} />
+          value={this.state ? this.state.text : ''} />
       </div>
     );
-  },
+  }
 
-  getInitialState: function() {
+  getInitialState() {
     return store.getState();
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     store.subscribe(() => this.setState(store.getState()));
-  },
+  }
 
-  onTextChange: function(event) {
+  onTextChange(event) {
     this.setState({
       text: event.target.value
     });
-  },
+  }
 
-  onKeyPress: function (e) {
+  onKeyPress(e) {
     if (e.charCode == 13) {
       var name = this.refs.nameInput.getDOMNode().value;
       var text = this.refs.messageInput.getDOMNode().value;
@@ -83,6 +92,19 @@ var Chat = React.createClass({
       });
     }
   }
-});
+}
 
-React.render(<Chat/>, document.body);
+export default class Root extends Component {
+  render() {
+    return (
+      <div>
+        <Chat />
+        <DebugPanel top right bottom>
+          <DevTools store={store} monitor={LogMonitor} />
+        </DebugPanel>
+      </div>
+    );
+  }
+}
+
+React.render(<Root />, document.body);
