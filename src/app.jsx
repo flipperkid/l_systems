@@ -5,22 +5,26 @@ import React, { Component } from 'react';
 
 const ActionTypes = {
   RECEIVE_MESSAGE: 'RECEIVE_MESSAGE',
-  SUBMIT: 'SUBMIT'
+  SUBMIT: 'SUBMIT',
+  SET_VALUE: 'SET_VALUE'
 };
 
 const initialState = {
   messages: [],
+  name: '',
   text: ''
 };
 const reducer = function(state = initialState, action) {
   var newState = $.extend(true, {}, state);
   switch (action.type) {
     case ActionTypes.SUBMIT:
-      setTimeout(() => firebase.push(action.message))
       newState.text = '';
       return newState;
     case ActionTypes.RECEIVE_MESSAGE:
       newState.messages.push(action.message)
+      return newState;
+    case ActionTypes.SET_VALUE:
+      newState[action.field] = action.value;
       return newState;
     default:
       return state;
@@ -31,14 +35,29 @@ const finalCreateStore = compose(
   devTools(),
   persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
 )(createStore);
-const store = finalCreateStore(reducer);
-const firebase = new Firebase('https://celerity.firebaseio.com/');
-firebase.on('child_added', function(snapshot) {
-  store.dispatch({
-    type: ActionTypes.RECEIVE_MESSAGE,
-    message: snapshot.val()
+window.store = finalCreateStore(reducer);
+
+window.firebase = new Firebase('https://celerity.firebaseio.com/');
+firebase.unauth();
+const authenticate = function() {
+  var state = store.getState();
+  firebase.authWithPassword({
+    email: state.name,
+    password: state.text
+  }, function(error, authData) {
+    if (error) {
+      console.log("Login Failed!", error);
+    } else {
+      console.log("Authenticated successfully with payload:", authData);
+      firebase.on('child_added', function(snapshot) {
+        store.dispatch({
+          type: ActionTypes.RECEIVE_MESSAGE,
+          message: snapshot.val()
+        });
+      }, this);
+    }
   });
-}, this);
+};
 
 class ChatMessage extends Component {
   render() {
@@ -62,9 +81,10 @@ class Chat extends Component {
     return (
       <div>
         <div>{messages}</div>
-        <input type='text' ref='nameInput' placeholder='Name' />
+        <input type='text' ref='nameInput' placeholder='Name'
+          onChange={this.onNameChange} value={this.state.name}/>
         <input type='text' ref='messageInput' placeholder='Message'
-          onKeyPress={this.onKeyPress} onChange={this.onTextChange}
+          onChange={this.onTextChange} onKeyPress={this.onTextKeyPress}
           value={this.state.text} />
       </div>
     );
@@ -74,25 +94,44 @@ class Chat extends Component {
     store.subscribe(() => this.setState(store.getState()));
   }
 
-  onTextChange(event) {
-    this.setState({
-      text: event.target.value
+  onNameChange(event) {
+    store.dispatch({
+      type: ActionTypes.SET_VALUE,
+      field: 'name',
+      value: event.target.value
     });
   }
 
-  onKeyPress(e) {
-    if (e.charCode == 13) {
-      var name = this.refs.nameInput.getDOMNode().value;
-      var text = this.refs.messageInput.getDOMNode().value;
-      store.dispatch({
-        type: ActionTypes.SUBMIT,
-        message: {name: name, text: text}
-      });
+  onTextChange(event) {
+    store.dispatch({
+      type: ActionTypes.SET_VALUE,
+      field: 'text',
+      value: event.target.value
+    });
+  }
+
+  onTextKeyPress(event) {
+    if (event.charCode !== 13) {
+      return;
     }
+
+    if (firebase.getAuth()) {
+      var state = store.getState();
+      firebase.push({
+        name: state.name,
+        text: state.text
+      });
+    } else {
+      authenticate();
+    }
+
+    store.dispatch({
+      type: ActionTypes.SUBMIT
+    });
   }
 }
 
-export default class Root extends Component {
+class Root extends Component {
   render() {
     return (
       <div>
