@@ -12,8 +12,44 @@
   end
 end
 
-include_recipe "nodejs"
+directory '/home/vagrant/dev' do
+  recursive true
+  owner 'vagrant'
+  group 'vagrant'
+  mode '0755'
+  action :create
+end
+
+file "/home/vagrant/dev/gulpfile.js" do
+  content ::File.open("/vagrant/gulpfile.js").read
+  owner "vagrant"
+  group "vagrant"
+  mode 0755
+  action :create
+end
+
+%w{index.html package.json webpack.config.js}.each do |filename|
+  link "/home/vagrant/dev/#{filename}" do
+    to "/vagrant/#{filename}"
+    owner "vagrant"
+    group "vagrant"
+    mode 0755
+  end
+end
+
 include_recipe "nodejs::npm"
-%w{gulp gulp-connect gulp-util webpack webpack-dev-server babel-loader react react-hot-loader redux redux-devtools}.each do |pkg|
+%w{gulp}.each do |pkg|
   nodejs_npm pkg
+end
+nodejs_npm "install" do
+  path "/home/vagrant/dev"
+  json true
+  user "vagrant"
+end
+
+include_recipe "runit"
+runit_service "gulp-webserver" do
+  default_logger true
+  owner "vagrant"
+  group "vagrant"
 end

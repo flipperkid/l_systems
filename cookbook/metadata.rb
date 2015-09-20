@@ -7,3 +7,4 @@ long_description 'Installs/Configures celerity_cookbook'
 version          '0.1.0'
 
 depends 'nodejs', '>= 2.4.0'
+depends 'runit', '>= 1.7.0'
