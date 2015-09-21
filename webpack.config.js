@@ -1,12 +1,7 @@
 var path = require('path');
 module.exports = {
-  entry: [
-    '/vagrant/src/app.jsx'
-  ],
+  entry: __dirname,
   cache: true,
-  resolve: {
-    root: '/home/vagrant/dev/node_modules'
-  },
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: 'dist/',
@@ -16,8 +11,8 @@ module.exports = {
     loaders: [{
       test: /\.jsx?$/,
       exclude: /(node_modules|bower_components)/,
-      include: '/vagrant/src',
-      loaders: ['react-hot', 'babel-loader']
+      include: path.join(__dirname, 'src/'),
+      loaders: ['react-hot-loader', 'babel-loader']
     }]
   },
   plugins: []

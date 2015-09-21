@@ -20,15 +20,7 @@ directory '/home/vagrant/dev' do
   action :create
 end
 
-file "/home/vagrant/dev/gulpfile.js" do
-  content ::File.open("/vagrant/gulpfile.js").read
-  owner "vagrant"
-  group "vagrant"
-  mode 0755
-  action :create
-end
-
-%w{index.html package.json webpack.config.js}.each do |filename|
+%w{package.json}.each do |filename|
   link "/home/vagrant/dev/#{filename}" do
     to "/vagrant/#{filename}"
     owner "vagrant"
@@ -45,6 +37,13 @@ nodejs_npm "install" do
   path "/home/vagrant/dev"
   json true
   user "vagrant"
+end
+
+link "/vagrant/node_modules" do
+  to "/home/vagrant/dev/node_modules"
+  owner "vagrant"
+  group "vagrant"
+  mode 0755
 end
 
 include_recipe "runit"
