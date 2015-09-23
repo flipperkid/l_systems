@@ -3,22 +3,16 @@ import { devTools, persistState } from 'redux-devtools';
 import ActionTypes from './ActionTypes';
 
 const initialState = {
-  messages: [],
-  name: '',
-  text: ''
+  rules: {
+    'F': 'FF'
+    'X': 'F-[[X]+X]+F[+FX]-X'
+  },
+  start: 'F',
+  iterations: 4
 };
 const reducer = function(state = initialState, action) {
   var newState = $.extend(true, {}, state);
   switch (action.type) {
-    case ActionTypes.SUBMIT:
-      newState.text = '';
-      return newState;
-    case ActionTypes.RECEIVE_MESSAGE:
-      newState.messages.push(action.message)
-      return newState;
-    case ActionTypes.SET_VALUE:
-      newState[action.field] = action.value;
-      return newState;
     default:
       return state;
   }

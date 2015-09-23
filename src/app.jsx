@@ -1,13 +1,13 @@
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import React, { Component } from 'react';
-import Chat from './Chat.jsx';
+import Iterations from './Iterations.jsx';
 import store from './store';
 
 class Root extends Component {
   render() {
     return (
       <div>
-        <Chat />
+        <Iterations />
         <DebugPanel top right bottom>
           <DevTools store={store} monitor={LogMonitor} />
         </DebugPanel>
