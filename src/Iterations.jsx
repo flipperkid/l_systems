@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ActionTypes from './ActionTypes';
 import Iteration from './Iteration.jsx';
 import Iterator from './Iterator';
 
@@ -12,7 +11,7 @@ class Iterations extends Component {
 
   render() {
     var iterations = this.state.iterations.map(function(iteration) {
-      return (<Iteration number={iteration.number} pattern={iteration.pattern]} />)
+      return (<Iteration number={iteration.number} pattern={iteration.pattern} />)
     });
 
     return (

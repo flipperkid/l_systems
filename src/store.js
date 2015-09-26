@@ -4,10 +4,10 @@ import ActionTypes from './ActionTypes';
 
 const initialState = {
   rules: {
-    'F': 'FF'
+    'F': 'FF',
     'X': 'F-[[X]+X]+F[+FX]-X'
   },
-  start: 'F',
+  start: 'X',
   iterations: 4
 };
 const reducer = function(state = initialState, action) {

@@ -15,6 +15,7 @@
   },
   "main": "src/app.jsx",
   "dependencies": {
+    "d3": "^3.5.6",
     "react": "^0.13.3",
     "redux": "^3.0.0",
     "redux-devtools": "^2.1.2"

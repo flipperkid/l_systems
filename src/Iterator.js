@@ -24,7 +24,7 @@ class Iterator {
     });
 
     for (var iteration = 0; iteration < storeState.iterations; iteration++) {
-      var initialPattern = iterations[iteration];
+      var initialPattern = iterations[iteration].pattern;
       var patternLength = initialPattern.length;
       var newPattern = '';
       for (var currPos = 0; currPos < patternLength; currPos++) {
