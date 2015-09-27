@@ -18,12 +18,13 @@ class Brancher {
   }
 
   update() {
-    var angleIncrement = 30 * Math.PI / 180;
-    var angle = 0;
-    var x = 0;
-    var y = 0;
+    var iteratorState = this.iterator.get();
+    var angleIncrement = iteratorState.angleIncrement * Math.PI / 180;
+    var angle = iteratorState.angle;
+    var x = iteratorState.startCoords.x;
+    var y = iteratorState.startCoords.y;
 
-    var iterations = this.iterator.get().iterations;
+    var iterations = iteratorState.iterations;
     var pattern = iterations[iterations.length - 1].pattern;
 
     var branches = [];
@@ -34,10 +35,10 @@ class Brancher {
       var currChar = pattern[currPos];
       switch(currChar) {
 				case '-':
-					angle -= angleIncrement;
+					angle -= angleIncrement * iteratorState.lineLength;
 					break;
 				case '+':
-					angle += angleIncrement;
+					angle += angleIncrement * iteratorState.lineLength;
 					break;
 				case '[':
 					nextBranchesStack.push({

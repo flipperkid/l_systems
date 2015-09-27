@@ -41,6 +41,10 @@ class Iterator {
       });
     }
     this.state.iterations = iterations;
+    this.state.lineLength = storeState.lineLength;
+    this.state.angle = storeState.angle;
+    this.state.angleIncrement = storeState.angleIncrement;
+    this.state.startCoords = storeState.startCoords;
   }
 }
 

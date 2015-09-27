@@ -8,11 +8,23 @@ const initialState = {
     'X': 'F-[[X]+X]+F[+FX]-X'
   },
   start: 'X',
-  iterations: 4
+  iterations: 6,
+  lineLength: 1,
+  angle: 270,
+  angleIncrement: 30,
+  startCoords: {
+    x: 0,
+    y: 400
+  }
 };
 const reducer = function(state = initialState, action) {
-  var newState = $.extend(true, {}, state);
   switch (action.type) {
+    case ActionTypes.UPDATE_STATE:
+      return $.extend(true, {}, state, action.update);
+    case ActionTypes.SET_START_COORDS:
+      var newState = $.extend(true, {}, state);
+      newState.startCoords = action.coords;
+      return newState;
     default:
       return state;
   }
